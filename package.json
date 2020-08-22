@@ -1,0 +1,24 @@
+{
+  "name": "socket-io-chat",
+  "version": "1.0.0",
+  "description": "Socket IO Chat App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TuxFan77/socket-io-chat.git"
+  },
+  "author": "Brian Cross",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TuxFan77/socket-io-chat/issues"
+  },
+  "homepage": "https://github.com/TuxFan77/socket-io-chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.27.0",
+    "socket.io": "^2.3.0"
+  }
+}
