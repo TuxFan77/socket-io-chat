@@ -1,5 +1,6 @@
 const socket = io();
 
+const chatMessages = document.querySelector(".chat-messages");
 const chatForm = document.getElementById("chat-form");
 
 // Handles chat message submission
@@ -12,6 +13,19 @@ chatForm.addEventListener("submit", e => {
 });
 
 // Handle chat messages coming from the server
-socket.on("message", message =>
-  console.log(`Chat message received: ${message}`)
-);
+socket.on("message", message => {
+  console.log(`Chat message received: ${message}`);
+  outputMessage(message);
+});
+
+// Outputs a chat message to the DOM
+function outputMessage(message) {
+  const messageWrapper = document.createElement("div");
+  messageWrapper.classList.add("message");
+  messageWrapper.innerHTML = `
+    <p class="meta">Brad <span>9:12pm</span></p>
+    <p class="text">${message}</p>
+  `;
+  chatMessages.appendChild(messageWrapper);
+  messageWrapper.scrollIntoView({ behavior: "smooth" });
+}
