@@ -13,5 +13,7 @@ app.use(express.static(path.join(__dirname, "public")));
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 io.on("connection", socket => {
-  console.log("Client connected");
+  console.log("Client connected. Socket ID:", socket.id);
+
+  io.emit("message", "Welcome to ChitChat.");
 });
