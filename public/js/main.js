@@ -1,6 +1,5 @@
 const socket = io();
 
-const chatMessages = document.querySelector(".chat-messages");
 const chatForm = document.getElementById("chat-form");
 
 // Handles chat message submission
@@ -26,6 +25,6 @@ function outputMessage(message) {
     <p class="meta">Brad <span>9:12pm</span></p>
     <p class="text">${message}</p>
   `;
-  chatMessages.appendChild(messageWrapper);
+  document.querySelector(".chat-messages").appendChild(messageWrapper);
   messageWrapper.scrollIntoView({ behavior: "smooth" });
 }
