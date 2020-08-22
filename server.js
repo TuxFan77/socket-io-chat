@@ -30,5 +30,8 @@ io.on("connection", socket => {
     io.emit("message", `Client ${socket.id} has left the chat.`);
   });
 
-  socket.on("chat", console.log);
+  // Handle incoming chat message. Send it out to all clients.
+  socket.on("chat", message => {
+    io.emit("chat", message);
+  });
 });
