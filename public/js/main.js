@@ -2,6 +2,7 @@ const socket = io();
 
 const chatForm = document.getElementById("chat-form");
 
+// Handles chat message submission
 chatForm.addEventListener("submit", e => {
   e.preventDefault();
   const { msg } = e.target.elements;
@@ -9,3 +10,6 @@ chatForm.addEventListener("submit", e => {
   msg.value = "";
   msg.focus();
 });
+
+// Handle chat messages coming from the server
+socket.on("chat", message => console.log(`Chat message received: ${message}`));
