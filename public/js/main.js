@@ -12,4 +12,6 @@ chatForm.addEventListener("submit", e => {
 });
 
 // Handle chat messages coming from the server
-socket.on("chat", message => console.log(`Chat message received: ${message}`));
+socket.on("message", message =>
+  console.log(`Chat message received: ${message}`)
+);

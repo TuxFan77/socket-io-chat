@@ -32,6 +32,6 @@ io.on("connection", socket => {
 
   // Handle incoming chat message. Send it out to all clients.
   socket.on("chat", message => {
-    io.emit("chat", message);
+    io.emit("message", message);
   });
 });
