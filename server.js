@@ -14,7 +14,7 @@ server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 io.on("connection", socket => {
   // Send message to the client that just connected
-  socket.emit("message", "Welcome to ChitChat!");
+  socket.emit("message", "Welcome to RocketChat!");
 
   // Broadcast to all clients except the one that just connected
   socket.broadcast.emit(
