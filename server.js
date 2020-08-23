@@ -3,10 +3,13 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const formatMessage = require("./utils/formatMessage");
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+const botName = "RocketChat Bot";
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -14,7 +17,7 @@ server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 io.on("connection", socket => {
   // Send message to the client that just connected
-  socket.emit("message", "Welcome to RocketChat!");
+  socket.emit("message", formatMessage(botName, "Welcome to RocketChat!"));
 
   // Broadcast to all clients except the one that just connected
   socket.broadcast.emit(

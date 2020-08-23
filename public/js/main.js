@@ -13,7 +13,7 @@ chatForm.addEventListener("submit", e => {
 
 // Handle chat messages coming from the server
 socket.on("message", message => {
-  console.log(`Chat message received: ${message}`);
+  console.log(`Chat message received: ${JSON.stringify(message)}`);
   outputMessage(message);
 });
 
