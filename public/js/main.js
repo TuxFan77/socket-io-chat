@@ -1,5 +1,6 @@
 const socket = io();
 
+const roomName = document.getElementById("room-name");
 const chatForm = document.getElementById("chat-form");
 
 // Parse the username and room from the query string
@@ -19,7 +20,10 @@ chatForm.addEventListener("submit", e => {
   msg.focus();
 });
 
-socket.on("usersInRoom", console.log);
+// Handle user list from server
+socket.on("usersInRoom", userList => {
+  updateRoomName(userList.room);
+});
 
 // Handle chat messages coming from the server
 socket.on("message", message => {
@@ -36,4 +40,9 @@ function outputMessage({ username, message, time }) {
   `;
   document.querySelector(".chat-messages").appendChild(messageWrapper);
   messageWrapper.scrollIntoView({ behavior: "smooth" });
+}
+
+// Updates the room name in the DOM
+function updateRoomName(room) {
+  roomName.textContent = room;
 }
