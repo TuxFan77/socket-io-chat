@@ -1,8 +1,9 @@
 const PORT = process.env.PORT || 3000;
 const path = require("path");
-const http = require("http");
 const express = require("express");
-const socketio = require("socket.io");
+const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const formatMessage = require("./utils/formatMessage");
 const {
   userJoin,
@@ -10,10 +11,6 @@ const {
   getCurrentUser,
   getUsersInRoom,
 } = require("./utils/users");
-
-const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
 
 const chatBot = "RocketChat Bot";
 
