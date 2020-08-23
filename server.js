@@ -4,6 +4,12 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const formatMessage = require("./utils/formatMessage");
+const {
+  userJoin,
+  userLeave,
+  getCurrentUser,
+  getUsersInRoom,
+} = require("./utils/users");
 
 const app = express();
 const server = http.createServer(app);
@@ -16,28 +22,52 @@ app.use(express.static(path.join(__dirname, "public")));
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 io.on("connection", socket => {
-  // Send message to the client that just connected
-  socket.emit("message", formatMessage(chatBot, "Welcome to RocketChat!"));
+  // Handle a user joining a room
+  socket.on("joinRoom", ({ username, room }) => {
+    // Add a new user to the list of users
+    const user = userJoin(socket.id, username, room);
 
-  // Broadcast to all clients except the one that just connected
-  socket.broadcast.emit(
-    "message",
-    formatMessage(chatBot, `Client ${socket.id} has connected to the chat.`)
-  );
+    // Join the user to the room
+    socket.join(user.room);
 
-  // When client disconnects, send a message to all clients.
-  // Since the socket object has disconnected we have to use io.emit.
-  // This broadcasts a message to every socket connection.
+    sendUsersInRoom(user.room);
+
+    // Send message to the user that just connected
+    socket.emit("message", formatMessage(chatBot, "Welcome to RocketChat!"));
+
+    // Update the front end with the current list of users in the room
+
+    // Broadcast to all users except the one that just connected
+    socket.broadcast
+      .to(user.room)
+      .emit(
+        "message",
+        formatMessage(chatBot, `${user.username} has connected to the chat.`)
+      );
+  });
+
+  // Handle incoming chat message. Send it out to all users in the same room
+  socket.on("chat", message => {
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit("message", formatMessage(user.username, message));
+  });
+
+  // When user disconnects, send a message to all users in the room
   socket.on("disconnect", () => {
-    console.log(`Client ${socket.id} disconnected.`);
-    io.emit(
+    const user = userLeave(socket.id);
+    if (!user) return;
+    sendUsersInRoom(user.room);
+    io.to(user.room).emit(
       "message",
-      formatMessage(chatBot, `Client ${socket.id} has left the chat.`)
+      formatMessage(chatBot, `${user.username} has left the chat.`)
     );
   });
 
-  // Handle incoming chat message. Send it out to all clients.
-  socket.on("chat", message => {
-    io.emit("message", formatMessage("USER", message));
-  });
+  // Given a room, send a list of users in that room
+  function sendUsersInRoom(room) {
+    io.to(room).emit("usersInRoom", {
+      room,
+      users: getUsersInRoom(room),
+    });
+  }
 });
