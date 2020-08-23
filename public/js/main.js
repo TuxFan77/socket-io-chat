@@ -13,16 +13,16 @@ chatForm.addEventListener("submit", e => {
 
 // Handle chat messages coming from the server
 socket.on("message", message => {
-  console.log(`Chat message received: ${JSON.stringify(message)}`);
+  console.log("Chat message received: ", message);
   outputMessage(message);
 });
 
 // Outputs a chat message to the DOM
-function outputMessage(message) {
+function outputMessage({ user, message, time }) {
   const messageWrapper = document.createElement("div");
   messageWrapper.classList.add("message");
   messageWrapper.innerHTML = `
-    <p class="meta">Brad <span>9:12pm</span></p>
+    <p class="meta">${user} <span>${time}</span></p>
     <p class="text">${message}</p>
   `;
   document.querySelector(".chat-messages").appendChild(messageWrapper);
