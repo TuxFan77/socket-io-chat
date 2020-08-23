@@ -30,6 +30,7 @@ io.on("connection", socket => {
     // Join the user to the room
     socket.join(user.room);
 
+    // Update the front end user list
     sendUsersInRoom(user.room);
 
     // Send message to the user that just connected
@@ -56,18 +57,19 @@ io.on("connection", socket => {
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
     if (!user) return;
+    // Update the front end with the list of users in the room
     sendUsersInRoom(user.room);
     io.to(user.room).emit(
       "message",
       formatMessage(chatBot, `${user.username} has left the chat.`)
     );
   });
-
-  // Given a room, send a list of users in that room
-  function sendUsersInRoom(room) {
-    io.to(room).emit("usersInRoom", {
-      room,
-      users: getUsersInRoom(room),
-    });
-  }
 });
+
+// Given a room, send a list of users in that room
+function sendUsersInRoom(room) {
+  io.to(room).emit("usersInRoom", {
+    room,
+    users: getUsersInRoom(room),
+  });
+}
