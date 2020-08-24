@@ -1,6 +1,7 @@
 const socket = io();
 
 const roomName = document.getElementById("room-name");
+const users = document.getElementById("users");
 const chatForm = document.getElementById("chat-form");
 
 // Parse the username and room from the query string
@@ -23,6 +24,7 @@ chatForm.addEventListener("submit", e => {
 // Handle user list from server
 socket.on("usersInRoom", userList => {
   updateRoomName(userList.room);
+  updateUserList(userList.users);
 });
 
 // Handle chat messages coming from the server
@@ -45,4 +47,10 @@ function outputMessage({ username, message, time }) {
 // Updates the room name in the DOM
 function updateRoomName(room) {
   roomName.textContent = room;
+}
+
+// Updates the user list in the DOM
+function updateUserList(userList) {
+  const html = userList.map(user => `<li>${user.username}</li>`).join("");
+  users.innerHTML = html;
 }
