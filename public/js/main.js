@@ -51,6 +51,5 @@ function updateRoomName(room) {
 
 // Updates the user list in the DOM
 function updateUserList(userList) {
-  const html = userList.map(user => `<li>${user.username}</li>`).join("");
-  users.innerHTML = html;
+  users.innerHTML = userList.map(user => `<li>${user.username}</li>`).join("");
 }
